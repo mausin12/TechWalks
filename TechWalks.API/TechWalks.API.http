@@ -1,0 +1,6 @@
+@TechWalks.API_HostAddress = http://localhost:5163
+
+GET {{TechWalks.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
