@@ -3,9 +3,9 @@ using TechWalks.API.Models.Domain;
 
 namespace TechWalks.API.Data
 {
-    public class NZWalksDbContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public NZWalksDbContext(DbContextOptions<NZWalksDbContext> dbContextOptions) : base(dbContextOptions)
+        public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
         {
 
         }
