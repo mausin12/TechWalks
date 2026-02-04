@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TechWalks.API.Models.Dto;
+using TechWalks.API.Repositories;
 
 namespace TechWalks.API.Controllers
 {
@@ -7,10 +10,21 @@ namespace TechWalks.API.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
+        private readonly IRegionRepository _regionRepository;
+        private readonly IMapper _mapper;
+
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
+        {
+            this._regionRepository = regionRepository;
+            this._mapper = mapper;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok();
+            var regions = await _regionRepository.GetAllAsync();
+            var regionDtos = _mapper.Map<List<RegionDto>>(regions);
+            return Ok(regionDtos);
         }
     }
 }
