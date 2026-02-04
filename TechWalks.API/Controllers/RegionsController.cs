@@ -8,7 +8,7 @@ namespace TechWalks.API.Controllers
     public class RegionsController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? filterOn, string? filterQuery)
+        public async Task<IActionResult> GetAll()
         {
             return Ok();
         }
