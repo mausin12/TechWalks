@@ -29,5 +29,18 @@ namespace TechWalks.API.Repositories
             await _dbContext.SaveChangesAsync();
             return region;
         }
+
+        public async Task<Region?> UpdateAsync(Guid id, Region region)
+        {
+            var regionFromDB = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            if (regionFromDB == null) return null;
+
+            regionFromDB.Code = region.Code;
+            regionFromDB.Name = region.Name;
+            regionFromDB.RegionImageUrl = region.RegionImageUrl;
+
+            await _dbContext.SaveChangesAsync();
+            return regionFromDB;
+        }
     }
 }

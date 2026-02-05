@@ -53,5 +53,20 @@ namespace TechWalks.API.Controllers
 
             return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
         }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
+        {
+            var region = _mapper.Map<Region>(updateRegionDto);
+
+            region = await _regionRepository.UpdateAsync(id, region);
+            if (region == null)
+                return NotFound();
+
+            //return NoContent(); return 204 No Content Response
+
+            return Ok(_mapper.Map<RegionDto>(region));
+        }
     }
 }
