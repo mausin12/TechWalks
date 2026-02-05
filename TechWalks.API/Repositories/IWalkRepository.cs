@@ -1,0 +1,9 @@
+﻿using TechWalks.API.Models.Domain;
+
+namespace TechWalks.API.Repositories
+{
+    public interface IWalkRepository
+    {
+        Task<Walk> CreateAsync(Walk walk);
+    }
+}
