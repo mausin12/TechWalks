@@ -9,6 +9,7 @@ namespace TechWalks.API.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<Region, RegionDto>().ReverseMap();
+            CreateMap<Region, CreateRegionDto>().ReverseMap();
         }
     }
 }

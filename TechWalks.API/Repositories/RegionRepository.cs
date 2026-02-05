@@ -22,5 +22,12 @@ namespace TechWalks.API.Repositories
         {
             return await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Region> CreateAsync(Region region)
+        {
+            _dbContext.Regions.Add(region);
+            await _dbContext.SaveChangesAsync();
+            return region;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TechWalks.API.Models.Domain;
 using TechWalks.API.Models.Dto;
 using TechWalks.API.Repositories;
 
@@ -39,6 +40,18 @@ namespace TechWalks.API.Controllers
             }
 
             return Ok(_mapper.Map<RegionDto>(region));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
+        {
+            var region = _mapper.Map<Region>(createRegionDto);
+
+            region = await _regionRepository.CreateAsync(region);
+
+            var regionDto = _mapper.Map<RegionDto>(region);
+
+            return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
         }
     }
 }
