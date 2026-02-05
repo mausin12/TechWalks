@@ -26,5 +26,19 @@ namespace TechWalks.API.Controllers
             var regionDtos = _mapper.Map<List<RegionDto>>(regions);
             return Ok(regionDtos);
         }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var region = await _regionRepository.GetByIdAsync(id);
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<RegionDto>(region));
+        }
     }
 }
