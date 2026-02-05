@@ -13,6 +13,7 @@ namespace TechWalks.API.Mappings
             CreateMap<Region, UpdateRegionDto>().ReverseMap();
             CreateMap<Walk, CreateWalkDto>().ReverseMap();
             CreateMap<Walk, WalkDto>().ReverseMap();
+            CreateMap<Difficulty, DifficultyDto>().ReverseMap();
         }
     }
 }
