@@ -1,4 +1,5 @@
-﻿using TechWalks.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TechWalks.API.Data;
 using TechWalks.API.Models.Domain;
 
 namespace TechWalks.API.Repositories
@@ -17,6 +18,11 @@ namespace TechWalks.API.Repositories
             await _dbContext.Walks.AddAsync(walk);
             await _dbContext.SaveChangesAsync();
             return walk;
+        }
+
+        public async Task<List<Walk>> GetAllAsync()
+        {
+            return await _dbContext.Walks.ToListAsync();
         }
     }
 }

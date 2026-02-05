@@ -27,5 +27,12 @@ namespace TechWalks.API.Controllers
             walk = await _walkRepository.CreateAsync(walk);
             return Ok(_mapper.Map<WalkDto>(walk));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var walks = await _walkRepository.GetAllAsync();
+            return Ok(_mapper.Map<List<WalkDto>>(walks));
+        }
     }
 }
