@@ -68,5 +68,25 @@ namespace TechWalks.API.Controllers
 
             return Ok(_mapper.Map<RegionDto>(region));
         }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var region = await _regionRepository.DeleteAsync(id);
+
+            if (region == null)
+                return NotFound();
+
+            //return NoContent();
+
+            // Returning 200 OK with a message body
+            return Ok(new
+            {
+                message = "Region deleted successfully.",
+                deletedId = id,
+                timestamp = DateTime.UtcNow
+            });
+        }
     }
 }

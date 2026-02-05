@@ -42,5 +42,14 @@ namespace TechWalks.API.Repositories
             await _dbContext.SaveChangesAsync();
             return regionFromDB;
         }
+
+        public async Task<Region?> DeleteAsync(Guid id)
+        {
+            var regionFromDB = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            if (regionFromDB == null) return null;
+            _dbContext.Regions.Remove(regionFromDB);
+            await _dbContext.SaveChangesAsync();
+            return regionFromDB;
+        }
     }
 }
