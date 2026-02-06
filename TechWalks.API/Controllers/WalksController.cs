@@ -53,5 +53,14 @@ namespace TechWalks.API.Controllers
             if (walk == null) return NotFound();
             return Ok(_mapper.Map<WalkDto>(walk));
         }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var walk = await _walkRepository.DeleteAsync(id);
+            if (walk == null) return NotFound();
+            return Ok(_mapper.Map<WalkDto>(walk));
+        }
     }
 }

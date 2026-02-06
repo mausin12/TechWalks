@@ -49,5 +49,14 @@ namespace TechWalks.API.Repositories
 
             return walkFromDb;
         }
+
+        public async Task<Walk?> DeleteAsync(Guid id)
+        {
+            var walkFromDb = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            if (walkFromDb == null) return null;
+            _dbContext.Walks.Remove(walkFromDb);
+            await _dbContext.SaveChangesAsync();
+            return walkFromDb;
+        }
     }
 }
