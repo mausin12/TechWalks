@@ -32,5 +32,22 @@ namespace TechWalks.API.Repositories
                             .Include("Region")
                             .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
+        {
+            var walkFromDb = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            if (walkFromDb == null) return null;
+
+            walkFromDb.Name = walk.Name;
+            walkFromDb.Description = walk.Description;
+            walkFromDb.LengthInKm = walk.LengthInKm;
+            walkFromDb.WalkImageUrl = walk.WalkImageUrl;
+            walkFromDb.DifficultyId = walk.DifficultyId;
+            walkFromDb.RegionId = walk.RegionId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return walkFromDb;
+        }
     }
 }

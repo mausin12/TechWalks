@@ -14,6 +14,10 @@ namespace TechWalks.API.Mappings
             CreateMap<Walk, CreateWalkDto>().ReverseMap();
             CreateMap<Walk, WalkDto>().ReverseMap();
             CreateMap<Difficulty, DifficultyDto>().ReverseMap();
+           
+            CreateMap<Walk, UpdateWalkDto>().ReverseMap()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)) //Use this if Property names are different
+                .ReverseMap();
         }
     }
 }

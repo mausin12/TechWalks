@@ -43,5 +43,15 @@ namespace TechWalks.API.Controllers
             if (walk == null) { return NotFound(); }
             return Ok(_mapper.Map<WalkDto>(walk));
         }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateWalkDto dto)
+        {
+            var walk = _mapper.Map<Walk>(dto);
+            walk = await _walkRepository.UpdateAsync(id, walk);
+            if (walk == null) return NotFound();
+            return Ok(_mapper.Map<WalkDto>(walk));
+        }
     }
 }
