@@ -20,9 +20,18 @@ namespace TechWalks.API.Repositories
             return walk;
         }
 
-        public async Task<List<Walk>> GetAllAsync()
+        public async Task<List<Walk>> GetAllAsync(string? filterOn, string? filterTerm)
         {
-            return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+            var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+            //Filtering
+            if (!String.IsNullOrWhiteSpace(filterOn) && !String.IsNullOrWhiteSpace(filterTerm))
+            {
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = walks.Where(x => x.Name.Contains(filterTerm));
+                }
+            }
+            return await walks.ToListAsync();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)

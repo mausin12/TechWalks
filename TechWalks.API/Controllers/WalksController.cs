@@ -33,9 +33,9 @@ namespace TechWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterTerm)
         {
-            var walks = await _walkRepository.GetAllAsync();
+            var walks = await _walkRepository.GetAllAsync(filterOn, filterTerm);
             return Ok(_mapper.Map<List<WalkDto>>(walks));
         }
 
