@@ -45,28 +45,36 @@ namespace TechWalks.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
-            var region = _mapper.Map<Region>(createRegionDto);
+            if (ModelState.IsValid)
+            {
+                var region = _mapper.Map<Region>(createRegionDto);
 
-            region = await _regionRepository.CreateAsync(region);
+                region = await _regionRepository.CreateAsync(region);
 
-            var regionDto = _mapper.Map<RegionDto>(region);
+                var regionDto = _mapper.Map<RegionDto>(region);
 
-            return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
+                return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
         [Route("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
-            var region = _mapper.Map<Region>(updateRegionDto);
+            if (ModelState.IsValid)
+            {
+                var region = _mapper.Map<Region>(updateRegionDto);
 
-            region = await _regionRepository.UpdateAsync(id, region);
-            if (region == null)
-                return NotFound();
+                region = await _regionRepository.UpdateAsync(id, region);
+                if (region == null)
+                    return NotFound();
 
-            //return NoContent(); return 204 No Content Response
+                //return NoContent(); return 204 No Content Response
 
-            return Ok(_mapper.Map<RegionDto>(region));
+                return Ok(_mapper.Map<RegionDto>(region));
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpDelete]

@@ -23,9 +23,13 @@ namespace TechWalks.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateWalkDto dto)
         {
-            var walk = _mapper.Map<Walk>(dto);
-            walk = await _walkRepository.CreateAsync(walk);
-            return Ok(_mapper.Map<WalkDto>(walk));
+            if (ModelState.IsValid)
+            {
+                var walk = _mapper.Map<Walk>(dto);
+                walk = await _walkRepository.CreateAsync(walk);
+                return Ok(_mapper.Map<WalkDto>(walk));
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpGet]
@@ -48,10 +52,14 @@ namespace TechWalks.API.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateWalkDto dto)
         {
-            var walk = _mapper.Map<Walk>(dto);
-            walk = await _walkRepository.UpdateAsync(id, walk);
-            if (walk == null) return NotFound();
-            return Ok(_mapper.Map<WalkDto>(walk));
+            if (ModelState.IsValid)
+            {
+                var walk = _mapper.Map<Walk>(dto);
+                walk = await _walkRepository.UpdateAsync(id, walk);
+                if (walk == null) return NotFound();
+                return Ok(_mapper.Map<WalkDto>(walk));
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpDelete]
