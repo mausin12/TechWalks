@@ -34,5 +34,14 @@ namespace TechWalks.API.Controllers
             var walks = await _walkRepository.GetAllAsync();
             return Ok(_mapper.Map<List<WalkDto>>(walks));
         }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            var walk = await _walkRepository.GetByIdAsync(id);
+            if (walk == null) { return NotFound(); }
+            return Ok(_mapper.Map<WalkDto>(walk));
+        }
     }
 }

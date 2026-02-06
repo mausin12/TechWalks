@@ -24,5 +24,13 @@ namespace TechWalks.API.Repositories
         {
             return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
         }
+
+        public async Task<Walk?> GetByIdAsync(Guid id)
+        {
+            return await _dbContext.Walks
+                            .Include("Difficulty")
+                            .Include("Region")
+                            .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }
