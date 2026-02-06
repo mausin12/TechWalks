@@ -6,7 +6,8 @@ namespace TechWalks.API.Repositories
     {
         Task<Walk> CreateAsync(Walk walk);
 
-        Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterTerm = null);
+        Task<List<Walk>> GetAllAsync(string? filterOn, string? filterTerm,
+                                    string? sortBy, bool isAscending = true);
 
         Task<Walk?> GetByIdAsync(Guid id);
 

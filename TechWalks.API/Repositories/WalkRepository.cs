@@ -20,7 +20,8 @@ namespace TechWalks.API.Repositories
             return walk;
         }
 
-        public async Task<List<Walk>> GetAllAsync(string? filterOn, string? filterTerm)
+        public async Task<List<Walk>> GetAllAsync(string? filterOn, string? filterTerm,
+                                                string? sortBy, bool isAscending)
         {
             var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
             //Filtering
@@ -29,6 +30,18 @@ namespace TechWalks.API.Repositories
                 if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
                 {
                     walks = walks.Where(x => x.Name.Contains(filterTerm));
+                }
+            }
+            //Sorting
+            if (!String.IsNullOrWhiteSpace(sortBy))
+            {
+                if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = isAscending ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                }
+                else if (sortBy.Equals("Length", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = isAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
                 }
             }
             return await walks.ToListAsync();
