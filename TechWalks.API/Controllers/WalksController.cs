@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TechWalks.API.CustomActionFilters;
 using TechWalks.API.Models.Domain;
 using TechWalks.API.Models.Dto;
 using TechWalks.API.Repositories;
@@ -21,15 +22,14 @@ namespace TechWalks.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] CreateWalkDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var walk = _mapper.Map<Walk>(dto);
-                walk = await _walkRepository.CreateAsync(walk);
-                return Ok(_mapper.Map<WalkDto>(walk));
-            }
-            return BadRequest(ModelState);
+
+            var walk = _mapper.Map<Walk>(dto);
+            walk = await _walkRepository.CreateAsync(walk);
+            return Ok(_mapper.Map<WalkDto>(walk));
+
         }
 
         [HttpGet]
@@ -50,16 +50,15 @@ namespace TechWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update(Guid id, UpdateWalkDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var walk = _mapper.Map<Walk>(dto);
-                walk = await _walkRepository.UpdateAsync(id, walk);
-                if (walk == null) return NotFound();
-                return Ok(_mapper.Map<WalkDto>(walk));
-            }
-            return BadRequest(ModelState);
+
+            var walk = _mapper.Map<Walk>(dto);
+            walk = await _walkRepository.UpdateAsync(id, walk);
+            if (walk == null) return NotFound();
+            return Ok(_mapper.Map<WalkDto>(walk));
+
         }
 
         [HttpDelete]

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TechWalks.API.CustomActionFilters;
 using TechWalks.API.Models.Domain;
 using TechWalks.API.Models.Dto;
 using TechWalks.API.Repositories;
@@ -43,38 +44,36 @@ namespace TechWalks.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
-            if (ModelState.IsValid)
-            {
-                var region = _mapper.Map<Region>(createRegionDto);
 
-                region = await _regionRepository.CreateAsync(region);
+            var region = _mapper.Map<Region>(createRegionDto);
 
-                var regionDto = _mapper.Map<RegionDto>(region);
+            region = await _regionRepository.CreateAsync(region);
 
-                return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
-            }
-            return BadRequest(ModelState);
+            var regionDto = _mapper.Map<RegionDto>(region);
+
+            return CreatedAtAction(nameof(GetById), new { Id = region.Id }, regionDto);
+
         }
 
         [HttpPut]
         [Route("{id:guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
-            if (ModelState.IsValid)
-            {
-                var region = _mapper.Map<Region>(updateRegionDto);
 
-                region = await _regionRepository.UpdateAsync(id, region);
-                if (region == null)
-                    return NotFound();
+            var region = _mapper.Map<Region>(updateRegionDto);
 
-                //return NoContent(); return 204 No Content Response
+            region = await _regionRepository.UpdateAsync(id, region);
+            if (region == null)
+                return NotFound();
 
-                return Ok(_mapper.Map<RegionDto>(region));
-            }
-            return BadRequest(ModelState);
+            //return NoContent(); return 204 No Content Response
+
+            return Ok(_mapper.Map<RegionDto>(region));
+
         }
 
         [HttpDelete]
