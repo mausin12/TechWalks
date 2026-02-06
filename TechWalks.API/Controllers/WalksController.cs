@@ -34,10 +34,12 @@ namespace TechWalks.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterTerm,
-                                                 [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+                                                 [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+                                                 [FromQuery] int pageNo = 1, [FromQuery] int pageSize = 50)
         {
             var walks = await _walkRepository.GetAllAsync(filterOn, filterTerm, 
-                                                            sortBy, isAscending ?? true);
+                                                            sortBy, isAscending ?? true,
+                                                            pageNo, pageSize);
             return Ok(_mapper.Map<List<WalkDto>>(walks));
         }
 

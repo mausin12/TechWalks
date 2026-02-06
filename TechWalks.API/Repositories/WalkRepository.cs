@@ -21,7 +21,8 @@ namespace TechWalks.API.Repositories
         }
 
         public async Task<List<Walk>> GetAllAsync(string? filterOn, string? filterTerm,
-                                                string? sortBy, bool isAscending)
+                                                string? sortBy, bool isAscending,
+                                                int pageNo = 1, int pageSize = 50)
         {
             var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
             //Filtering
@@ -44,6 +45,9 @@ namespace TechWalks.API.Repositories
                     walks = isAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
                 }
             }
+            //Pagination
+            walks = walks.Skip((pageNo - 1) * pageSize).Take(pageSize);
+
             return await walks.ToListAsync();
         }
 
