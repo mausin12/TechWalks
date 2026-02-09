@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TechWalks.API.Models.Dto;
+using TechWalks.API.Repositories;
 
 namespace TechWalks.API.Controllers
 {
@@ -10,10 +11,13 @@ namespace TechWalks.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager,
+            ITokenRepository tokenRepository)
         {
             this._userManager = userManager;
+            this._tokenRepository = tokenRepository;
         }
 
         [HttpPost]
@@ -39,6 +43,31 @@ namespace TechWalks.API.Controllers
                 }
             }
             return BadRequest("Something went wrong...");
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Username);
+            if (user != null)
+            {
+                bool isPwdValid = await _userManager.CheckPasswordAsync(user, dto.Password);
+                if (isPwdValid)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if (roles != null)
+                    {
+                        var jwtToken = _tokenRepository.CreateJwtToken(user, roles.ToList());
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+                        return Ok(response);
+                    }
+                }
+            }
+            return BadRequest("Username and/or Password is wrong");
         }
     }
 }
