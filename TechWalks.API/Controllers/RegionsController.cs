@@ -11,7 +11,7 @@ namespace TechWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionRepository _regionRepository;
@@ -24,6 +24,7 @@ namespace TechWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetAll()
         {
             var regions = await _regionRepository.GetAllAsync();
@@ -33,6 +34,7 @@ namespace TechWalks.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var region = await _regionRepository.GetByIdAsync(id);
@@ -47,6 +49,7 @@ namespace TechWalks.API.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
 
@@ -63,6 +66,7 @@ namespace TechWalks.API.Controllers
         [HttpPut]
         [Route("{id:guid}")]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
 
@@ -80,6 +84,7 @@ namespace TechWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Reader,Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var region = await _regionRepository.DeleteAsync(id);
