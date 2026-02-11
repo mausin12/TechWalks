@@ -16,20 +16,34 @@ namespace TechWalks.API.Controllers
     {
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<RegionsController> _logger;
 
-        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper,
+            ILogger<RegionsController> logger)
         {
             this._regionRepository = regionRepository;
             this._mapper = mapper;
+            this._logger = logger;
         }
 
         [HttpGet]
-        [Authorize(Roles ="Reader")]
+        //[Authorize(Roles ="Reader")] //Commented to avoid log in for logging checking
         public async Task<IActionResult> GetAll()
         {
-            var regions = await _regionRepository.GetAllAsync();
-            var regionDtos = _mapper.Map<List<RegionDto>>(regions);
-            return Ok(regionDtos);
+            _logger.LogInformation("Get All Regions called");
+            try
+            {
+                throw new Exception("Custom Exception");
+                var regions = await _regionRepository.GetAllAsync();
+                var regionDtos = _mapper.Map<List<RegionDto>>(regions);
+                return Ok(regionDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,ex.Message);
+                throw;
+            }
+            
         }
 
         [HttpGet]
