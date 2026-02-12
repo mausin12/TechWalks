@@ -30,20 +30,10 @@ namespace TechWalks.API.Controllers
         //[Authorize(Roles ="Reader")] //Commented to avoid log in for logging checking
         public async Task<IActionResult> GetAll()
         {
-            _logger.LogInformation("Get All Regions called");
-            try
-            {
                 throw new Exception("Custom Exception");
                 var regions = await _regionRepository.GetAllAsync();
                 var regionDtos = _mapper.Map<List<RegionDto>>(regions);
                 return Ok(regionDtos);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,ex.Message);
-                throw;
-            }
-            
         }
 
         [HttpGet]

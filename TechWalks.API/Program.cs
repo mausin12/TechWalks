@@ -7,6 +7,7 @@ using Serilog;
 using System.Text;
 using TechWalks.API.Data;
 using TechWalks.API.Mappings;
+using TechWalks.API.Middlewares;
 using TechWalks.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-    .MinimumLevel.Information()
+    .MinimumLevel.Warning()
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
@@ -79,6 +80,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<AppExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
